@@ -1,4 +1,4 @@
-package cleancode.studycafe.self.model;
+package cleancode.studycafe.self.pass;
 
 public class StudyCafePass {
 
@@ -35,16 +35,10 @@ public class StudyCafePass {
     }
 
     public String display() {
-        if (passType == StudyCafePassType.HOURLY) {
-            return String.format("%s시간권 - %d원", duration, price);
-        }
-        if (passType == StudyCafePassType.WEEKLY) {
-            return String.format("%s주권 - %d원", duration, price);
-        }
-        if (passType == StudyCafePassType.FIXED) {
-            return String.format("%s주권 - %d원", duration, price);
-        }
-        return "";
+        return String.format("%s%s - %d원", duration, passType.toString(),price);
     }
 
+    public boolean isExistsLocker(StudyCafePassType studyCafePassType, int duration) {
+        return this.passType == studyCafePassType && this.duration == duration;
+    }
 }
