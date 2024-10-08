@@ -1,5 +1,6 @@
 package cleancode.studycafe.self.io;
 
+import cleancode.studycafe.self.order.Order;
 import cleancode.studycafe.self.pass.StudyCafeLockerPass;
 import cleancode.studycafe.self.pass.StudyCafePass;
 
@@ -17,7 +18,7 @@ public interface OutputHandler {
 
     void askLockerPass(StudyCafeLockerPass lockerPass);
 
-    void showPassOrderSummary(StudyCafePass selectedPass, StudyCafeLockerPass lockerPass);
+    void showPassOrderSummary(Order order);
 
     void showSimpleMessage(String message);
 }

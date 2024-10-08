@@ -34,7 +34,7 @@ public class StudyCafePass {
         return discountRate;
     }
 
-    public String display() {
+    public String toDisplayString() {
         return String.format("%s%s - %d원", duration, passType.toString(),price);
     }
 

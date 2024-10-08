@@ -45,7 +45,7 @@ public class StudyCafePassMachine {
             StudyCafeLockerPass studyCafeLockerPass = getStudyCafeLockerPass(selectedPass);
 
             Order order = Order.of(selectedPass, studyCafeLockerPass);
-            order.showSummary();
+            outputHandler.showPassOrderSummary(order);
 
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
