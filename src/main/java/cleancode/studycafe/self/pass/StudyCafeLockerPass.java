@@ -1,5 +1,9 @@
 package cleancode.studycafe.self.pass;
 
+import cleancode.studycafe.self.io.StudyCafeHandler;
+
+import java.util.List;
+
 public class StudyCafeLockerPass {
 
     private final StudyCafePassType passType;
@@ -16,12 +20,26 @@ public class StudyCafeLockerPass {
         return new StudyCafeLockerPass(passType, duration, price);
     }
 
-    public StudyCafePassType getPassType() {
-        return passType;
+    public static StudyCafeLockerPass ofHandler(StudyCafeHandler studyCafeHandler, StudyCafePass studyCafePass) {
+
+        List<String> lines = studyCafeHandler.getStudyCafeLockerPass();
+
+        for (String line : lines) {
+            String[] values = line.split(",");
+            StudyCafePassType studyCafePassType = StudyCafePassType.valueOf(values[0]);
+            int duration = Integer.parseInt(values[1]);
+            int price = Integer.parseInt(values[2]);
+
+            if (studyCafePass.isExistsLocker(studyCafePassType, duration)) {
+                return StudyCafeLockerPass.of(studyCafePassType, duration, price);
+            }
+        }
+
+        return StudyCafeLockerPass.of(StudyCafePassType.UNKNOWN, 0, 0);
     }
 
-    public int getDuration() {
-        return duration;
+    public StudyCafePassType getPassType() {
+        return passType;
     }
 
     public int getPrice() {
@@ -35,4 +53,5 @@ public class StudyCafeLockerPass {
     public boolean isExistsLocker() {
         return passType != StudyCafePassType.UNKNOWN;
     }
+
 }

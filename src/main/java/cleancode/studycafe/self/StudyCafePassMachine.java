@@ -9,7 +9,6 @@ import cleancode.studycafe.self.order.Order;
 import cleancode.studycafe.self.pass.StudyCafeLockerPass;
 import cleancode.studycafe.self.pass.StudyCafePass;
 import cleancode.studycafe.self.pass.StudyCafePassType;
-import cleancode.studycafe.self.pass.StudyCafePasses;
 
 import java.util.List;
 
@@ -19,13 +18,10 @@ public class StudyCafePassMachine {
     private final OutputHandler outputHandler;
     private final StudyCafeHandler studyCafeHandler;
 
-    private final StudyCafePasses studyCafePasses;
-
     public StudyCafePassMachine(StudyCafeConfig studyCafeConfig) {
         this.inputHandler = studyCafeConfig.getInputHandler();
         this.outputHandler = studyCafeConfig.getOutputHandler();
         this.studyCafeHandler = studyCafeConfig.getStudyCafeHandler();
-        this.studyCafePasses = new StudyCafePasses(studyCafeHandler);
     }
 
     public void run() {
@@ -37,7 +33,7 @@ public class StudyCafePassMachine {
 
             StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
 
-            List<StudyCafePass> studyCafePassList = studyCafePasses.getStudyCafePassesAt(studyCafePassType);
+            List<StudyCafePass> studyCafePassList = StudyCafePass.ofHandler(this.studyCafeHandler, studyCafePassType);
 
             outputHandler.showPassListForSelection(studyCafePassList);
             StudyCafePass selectedPass = inputHandler.getSelectPass(studyCafePassList);
@@ -55,10 +51,10 @@ public class StudyCafePassMachine {
     }
 
     private StudyCafeLockerPass getStudyCafeLockerPass(StudyCafePass selectedPass) {
-        StudyCafeLockerPass studyCafeLockerPass = studyCafePasses.getStudyCafeLockerPassesAt(selectedPass);
-        if(studyCafeLockerPass.isExistsLocker()) {
+        StudyCafeLockerPass studyCafeLockerPass = StudyCafeLockerPass.ofHandler(this.studyCafeHandler, selectedPass);
+        if (studyCafeLockerPass.isExistsLocker()) {
             outputHandler.askLockerPass(studyCafeLockerPass);
-            if(!inputHandler.getLockerSelection()){
+            if (!inputHandler.getLockerSelection()) {
                 studyCafeLockerPass = null;
             }
         }
