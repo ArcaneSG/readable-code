@@ -1,11 +1,13 @@
 package cleancode.studycafe.tobe.io;
 
+import cleancode.studycafe.tobe.model.Order.StudyCafePassOrder;
 import cleancode.studycafe.tobe.model.pass.locker.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.pass.StudyCafePass;
 import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPass;
 import cleancode.studycafe.tobe.model.pass.StudyCafePassType;
 
 import java.util.List;
+import java.util.Optional;
 
 public class OutputHandler {
 
@@ -44,33 +46,6 @@ public class OutputHandler {
         System.out.println("1. 예 | 2. 아니오");
     }
 
-    public void showPassOrderSummary(StudyCafeSeatPass selectedPass) {
-        showPassOrderSummary(selectedPass, null);
-    }
-
-    public void showPassOrderSummary(StudyCafeSeatPass selectedPass, StudyCafeLockerPass lockerPass) {
-        System.out.println();
-        System.out.println("이용 내역");
-        System.out.println("이용권: " + this.display(selectedPass));
-        if (lockerPass != null) {
-            System.out.println("사물함: " + this.display(lockerPass));
-        }
-
-        double discountRate = selectedPass.getDiscountRate();
-        int discountPrice = (int) (selectedPass.getPrice() * discountRate);
-        if (discountPrice > 0) {
-            System.out.println("이벤트 할인 금액: " + discountPrice + "원");
-        }
-
-        int totalPrice = selectedPass.getPrice() - discountPrice + (lockerPass != null ? lockerPass.getPrice() : 0);
-        System.out.println("총 결제 금액: " + totalPrice + "원");
-        System.out.println();
-    }
-
-    public void showSimpleMessage(String message) {
-        System.out.println(message);
-    }
-
     private String display(StudyCafePass pass) {
         StudyCafePassType passType = pass.getPassType();
         int duration = pass.getDuration();
@@ -88,4 +63,29 @@ public class OutputHandler {
         return "";
     }
 
+    public void showSimpleMessage(String message) {
+        System.out.println(message);
+    }
+
+    public void showPassOrderSummary(StudyCafePassOrder passOrder) {
+        StudyCafeSeatPass selectedPass = passOrder.getSeatPass();
+        Optional<StudyCafeLockerPass> optionalLockerPass = passOrder.getLockerPass();
+
+        System.out.println();
+        System.out.println("이용 내역");
+        System.out.println("이용권: " + this.display(selectedPass));
+
+        optionalLockerPass.ifPresent(lockerPass ->
+            System.out.println("사물함: " + this.display(lockerPass))
+        );
+
+        int discountPrice = passOrder.getDiscountPrice();
+        if (discountPrice > 0) {
+            System.out.println("이벤트 할인 금액: " + discountPrice + "원");
+        }
+
+        int totalPrice = passOrder.getTotalPrice();
+        System.out.println("총 결제 금액: " + totalPrice + "원");
+        System.out.println();
+    }
 }
